@@ -1,0 +1,62 @@
+"set mouse=a  " enable mouse
+set encoding=utf-8
+set number relativenumber
+set noswapfile
+set scrolloff=7
+
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent
+set fileformat=unix
+filetype indent on      " load filetype-specific indent files
+
+inoremap jk <esc>
+
+
+call plug#begin('~/.vim/plugged')
+
+"Plug 'neoclide/coc.nvim', { 'branch': 'master', 'do': 'yarn install --frozen-lockfile' }
+
+" color schemas
+Plug 'morhetz/gruvbox'  " colorscheme gruvbox
+Plug 'flazz/vim-colorschemes' " molokai woombat
+"Plug 'preservim/nerdtree'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'nvim-tree/nvim-web-devicons' " optional, for file icons
+Plug 'nvim-tree/nvim-tree.lua'
+
+call plug#end()
+
+
+colorscheme gruvbox
+"=======================
+"       MAPPINGS
+"=======================
+
+let mapleader = " "
+
+
+
+
+
+vmap <leader>y "+*+y
+vmap <leader>d "+d
+nmap <leader>p "+p
+nmap <leader>P "+P
+vmap <leader>p "+p
+vmap <leader>P "+P
+nnoremap <leader>e :NvimTreeToggle
+
+
+set colorcolumn=79
+
+
+" Visual debugger Vimspector
+"let g:vimspector_enable_mappings = 'HUMAN'
+"nnoremap <leader>5 :VimspectorReset<Cr>
+"let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
+"
+" Nerd tree
