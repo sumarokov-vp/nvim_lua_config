@@ -11,10 +11,10 @@ if not luasnip_status then
 end
 
 -- import lspkind plugin safely
--- local lspkind_status, lspkind = pcall(require, "lspkind")
--- if not lspkind_status then
---   return
--- end
+local lspkind_status, lspkind = pcall(require, "lspkind")
+if not lspkind_status then
+  return
+end
 
 -- load vs-code like snippets from plugins (e.g. friendly-snippets)
 require("luasnip/loaders/from_vscode").lazy_load()
@@ -32,22 +32,33 @@ cmp.setup({
     ["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
     ["<C-b>"] = cmp.mapping.scroll_docs(-4),
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
-    ["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
+    ["<C-i>"] = cmp.mapping.complete(), -- show completion suggestions
     ["<C-e>"] = cmp.mapping.abort(), -- close completion window
-    ["<CR>"] = cmp.mapping.confirm({ select = false }),
+    ['<CR>'] = cmp.mapping(function(fallback) 
+      -- workaround for https://github.com/hrsh7th/cmp-nvim-lsp-signature-help/issues/13
+      -- instead of ["<CR>"] = cmp.mapping.confirm({ select = false }),
+      if cmp.get_selected_entry() ~= nil and cmp.get_selected_entry().source.name == 'nvim_lsp_signature_help' then
+        fallback()
+      else
+        cmp.mapping.confirm {
+          behavior = cmp.ConfirmBehavior.Replace,
+          select = true,
+        }(fallback)
+      end
+    end),
   }),
   -- sources for autocompletion
   sources = cmp.config.sources({
-    -- { name = "nvim_lsp" }, -- lsp
+    { name = "nvim_lsp" }, -- lsp
     { name = "luasnip" }, -- snippets
     { name = "buffer" }, -- text within current buffer
     { name = "path" }, -- file system paths
   }),
   -- configure lspkind for vs-code like icons
-  -- formatting = {
-  --   format = lspkind.cmp_format({
-  --     maxwidth = 50,
-  --     ellipsis_char = "...",
-  --   }),
-  -- },
+  formatting = {
+    format = lspkind.cmp_format({
+      maxwidth = 50,
+      ellipsis_char = "...",
+    }),
+  },
 })
